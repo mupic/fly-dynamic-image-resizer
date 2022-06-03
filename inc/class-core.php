@@ -1,4 +1,5 @@
 <?php
+
 namespace JB\FlyImages;
 
 class Core {
@@ -6,10 +7,10 @@ class Core {
 	/**
 	 * Properties.
 	 */
-	private static $_instance = null;
-	private $_image_sizes     = array();
-	private $_fly_dir         = '';
-	private $_capability      = 'manage_options';
+	private static $_instance    = null;
+	private        $_image_sizes = array();
+	private        $_fly_dir     = '';
+	private        $_capability  = 'manage_options';
 
 	/**
 	 * Get current instance.
@@ -174,10 +175,10 @@ class Core {
 	/**
 	 * Add image sizes to be created on the fly.
 	 *
-	 * @param  string   $size_name
-	 * @param  integer  $width
-	 * @param  integer  $height
-	 * @param  boolean  $crop
+	 * @param  string $size_name
+	 * @param  integer $width
+	 * @param  integer $height
+	 * @param  mixed $crop
 	 * @return boolean
 	 */
 	public function add_image_size( $size_name, $width = 0, $height = 0, $crop = false ) {
@@ -219,9 +220,9 @@ class Core {
 	/**
 	 * Gets a dynamically generated image URL from the Fly_Images class.
 	 *
-	 * @param  integer  $attachment_id
-	 * @param  mixed    $size
-	 * @param  boolean  $crop
+	 * @param  integer $attachment_id
+	 * @param  mixed $size
+	 * @param  mixed $crop
 	 * @return array
 	 */
 	public function get_attachment_image_src( $attachment_id = 0, $size = '', $crop = null ) {
@@ -259,7 +260,7 @@ class Core {
 			$is_crop_by_coordinates = is_array( $crop ) && isset( $crop[0] ) && isset( $crop[1] ) && is_numeric( $crop[0] );
 
 			//If it is a string and into a number value, then parse it as an integer.
-			if( $is_crop_by_coordinates && ( is_string( $crop[0] ) || is_string( $crop[1] ) ) ) {
+			if ( $is_crop_by_coordinates && ( is_string( $crop[0] ) || is_string( $crop[1] ) ) ) {
 				$crop[0] = intval( $crop[0] );
 				$crop[1] = intval( $crop[1] );
 			}
@@ -273,8 +274,8 @@ class Core {
 				$image_size = getimagesize( $fly_file_path );
 				if ( ! empty( $image_size ) ) {
 					return array(
-						'src'    => $this->get_fly_path( $fly_file_path ),
-						'width'  => $image_size[0],
+						'src' => $this->get_fly_path( $fly_file_path ),
+						'width' => $image_size[0],
 						'height' => $image_size[1],
 					);
 				} else {
@@ -291,7 +292,7 @@ class Core {
 			$this->check_fly_dir();
 
 			// Get WP Image Editor Instance
-			$image_path   = apply_filters(
+			$image_path = apply_filters(
 				'fly_attached_file',
 				get_attached_file( $attachment_id ),
 				$attachment_id,
@@ -303,30 +304,32 @@ class Core {
 			if ( ! is_wp_error( $image_editor ) ) {
 
 				// Create new image
-				if( $is_crop_by_coordinates ) {
+				if ( $is_crop_by_coordinates ) {
 					$image_orig_size = $image_editor->get_size();
 
 					$x = $crop[0];
 					$y = $crop[1];
 
 					//By default, we use the original value, since getting it is more difficult than any other.
-					$custom_crop_w = !empty($crop[2])? $crop[2] : $image_orig_size['width'];
-					$custom_crop_h = !empty($crop[3])? $crop[3] : $image_orig_size['height'];
+					$custom_crop_w = ! empty( $crop[2] ) ? $crop[2] : $image_orig_size['width'];
+					$custom_crop_h = ! empty( $crop[3] ) ? $crop[3] : $image_orig_size['height'];
 
-					if( is_float( $x ) ) { //is percents
-						if( empty($crop[2]) && empty($crop[3]) ){
+					if ( is_float( $x ) ) { //is percents
+						if ( empty( $crop[2] ) && empty( $crop[3] ) ) {
+							$_width  = $height ? $height : $image_orig_size['width'];
+							$_height = $height ? $height : $image_orig_size['height'];
 							//Select the crop size on the larger side. Crop off the largest side.
 							//Using proportions
-							if($image_orig_size['width'] > $image_orig_size['height']){
-								$src_w = $width * ( $image_orig_size['height'] / $height );
+							if ( $image_orig_size['width'] > $image_orig_size['height'] ) {
+								$src_w = $_width * ( $image_orig_size['height'] / $_height );
 								$src_h = $image_orig_size['height'];
-							}else{
+							} else {
 								$src_w = $image_orig_size['width'];
-								$src_h = $height * ( $image_orig_size['width'] / $width );
+								$src_h = $_height * ( $image_orig_size['width'] / $_width );
 							}
 
 							//Move the centering point.
-							if( $image_orig_size['width'] > $image_orig_size['height'] ) {
+							if ( $image_orig_size['width'] > $image_orig_size['height'] ) {
 								$src_x = ( $image_orig_size['width'] - $src_w ) * $x;
 								$src_y = 0;
 							} else {
@@ -362,8 +365,8 @@ class Core {
 				// Image created, return its data
 				$image_dimensions = $image_editor->get_size();
 				return array(
-					'src'    => $this->get_fly_path( $fly_file_path ),
-					'width'  => $image_dimensions['width'],
+					'src' => $this->get_fly_path( $fly_file_path ),
+					'width' => $image_dimensions['width'],
 					'height' => $image_dimensions['height'],
 				);
 			}
@@ -378,10 +381,10 @@ class Core {
 	 *
 	 * Based on /wp-includes/media.php -> wp_get_attachment_image()
 	 *
-	 * @param  integer  $attachment_id
-	 * @param  mixed    $size
-	 * @param  boolean  $crop
-	 * @param  array    $attr
+	 * @param  integer $attachment_id
+	 * @param  mixed $size
+	 * @param  boolean $crop
+	 * @param  array $attr
 	 * @return string
 	 */
 	public function get_attachment_image( $attachment_id = 0, $size = '', $crop = null, $attr = array() ) {
@@ -404,9 +407,9 @@ class Core {
 			}
 			$attachment   = get_post( $attachment_id );
 			$default_attr = array(
-				'src'   => $image['src'],
+				'src' => $image['src'],
 				'class' => "attachment-$size_class",
-				'alt'   => trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) ),
+				'alt' => trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) ),
 			);
 			if ( empty( $default_attr['alt'] ) ) {
 				$default_attr['alt'] = trim( strip_tags( $attachment->post_excerpt ) );
@@ -431,9 +434,9 @@ class Core {
 	/**
 	 * Get a file name based on parameters.
 	 *
-	 * @param  string  $file_name
-	 * @param  string  $width
-	 * @param  string  $height
+	 * @param  string $file_name
+	 * @param  string $width
+	 * @param  string $height
 	 * @param  boolean $crop
 	 * @return string
 	 */
@@ -446,9 +449,9 @@ class Core {
 			$crop_extension = '-c';
 		} elseif ( is_array( $crop ) ) {
 			$is_crop_by_coordinates = is_numeric( $crop[0] );
-			$crop_extension = '-' . implode( $is_crop_by_coordinates? '-' : '', array_map( function( $position ) use( $is_crop_by_coordinates ) {
-				return $is_crop_by_coordinates? strtr( (string) $position, ['.' => '_'] ) : $position[0];
-			}, $crop ) );
+			$crop_extension         = '-' . implode( $is_crop_by_coordinates ? '-' : '', array_map( function( $position ) use ( $is_crop_by_coordinates ) {
+					return $is_crop_by_coordinates ? strtr( (string) $position, [ '.' => '_' ] ) : $position[0];
+				}, $crop ) );
 		}
 
 		/**

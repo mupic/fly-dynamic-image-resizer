@@ -24,3 +24,22 @@ This is because the images created using this plugin are dynamically created whe
 ## Documentation
 
 The wiki contains all the documentation for this plugin: [Documentation](https://github.com/junaidbhura/fly-dynamic-image-resizer/wiki)
+
+# Functions by Mupic:
+
+Added the ability to select the cropping area in percent or in pixels.
+
+Added new argument types for the crop attribute:
+
+`$position = array('right', 'bottom'); //Normal use`
+
+`$position = array(100, 300, 960, 1280); // Coordinates are relative to the original size.`
+($x, $y, $custom_crop_width, $custoim_crop_height) - $custom_crop_* is a value for custom selection of the cropped area relative to the original image size. If one value is filled in and the other value is left blank or 0 is specified, then the value will be replaced with the original image size.
+It should be borne in mind that the size of the cropping area should not exceed the size of the picture, otherwise the picture will be smaller than expected, l.e. this statement must be true: $x + $custom_crop_width <= $original_width
+
+`$position = array((float) 1, (float) 1); // Floating point numbers are calculated as percentages, relative to their original size.`
+This example is equivalent to array('right', 'bottom')
+
+`$position = array((float) 0.6, (float) 0.5, 960, 1280); //Cuts out an area of 960x1280 from the center with a slight shift to the right.`
+
+`echo fly_get_attachment_image(get_post_thumbnail_id(), array(480, 640), $position); //The returned image size will be 480x640.`
