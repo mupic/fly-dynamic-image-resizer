@@ -25,7 +25,7 @@ This is because the images created using this plugin are dynamically created whe
 
 The wiki contains all the documentation for this plugin: [Documentation](https://github.com/junaidbhura/fly-dynamic-image-resizer/wiki)
 
-# Functions by Mupic:
+# Features added by Mupic:
 
 Added the ability to select the cropping area in percent or in pixels.
 
