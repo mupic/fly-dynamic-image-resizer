@@ -316,7 +316,7 @@ class Core {
 
 					if ( is_float( $x ) ) { //is percents
 						if ( empty( $crop[2] ) && empty( $crop[3] ) ) {
-							$_width  = $height ? $height : $image_orig_size['width'];
+							$_width  = $width ? $width : $image_orig_size['width'];
 							$_height = $height ? $height : $image_orig_size['height'];
 							//Select the crop size on the larger side. Crop off the largest side.
 							//Using proportions
