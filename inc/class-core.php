@@ -223,9 +223,10 @@ class Core {
 	 * @param  integer $attachment_id
 	 * @param  mixed $size
 	 * @param  mixed $crop
+	 * @param  bool $webp Whether to convert the image to webp format.
 	 * @return array
 	 */
-	public function get_attachment_image_src( $attachment_id = 0, $size = '', $crop = null ) {
+	public function get_attachment_image_src( $attachment_id = 0, $size = '', $crop = null, $webp = false ) {
 		if ( $attachment_id < 1 || empty( $size ) ) {
 			return array();
 		}
@@ -268,6 +269,9 @@ class Core {
 			// Get file path
 			$fly_dir       = $this->get_fly_dir( $attachment_id );
 			$fly_file_path = $fly_dir . DIRECTORY_SEPARATOR . $this->get_fly_file_name( basename( $image['file'] ), $width, $height, $crop );
+
+			//add webp
+			$fly_file_path = $webp ? $fly_file_path . '.webp' : $fly_file_path;
 
 			// Check if file exsists
 			if ( file_exists( $fly_file_path ) ) {
@@ -357,7 +361,8 @@ class Core {
 					$crop = false;
 				}
 				$image_editor->resize( $width, $height, $crop );
-				$image_editor->save( $fly_file_path );
+
+				$image_editor->save( $fly_file_path, $webp ? 'image/webp' : null );
 
 				// Trigger action
 				do_action( 'fly_image_created', $attachment_id, $fly_file_path );
@@ -385,9 +390,10 @@ class Core {
 	 * @param  mixed $size
 	 * @param  boolean $crop
 	 * @param  array $attr
+	 * @param  bool $webp Whether to convert the image to webp format.
 	 * @return string
 	 */
-	public function get_attachment_image( $attachment_id = 0, $size = '', $crop = null, $attr = array() ) {
+	public function get_attachment_image( $attachment_id = 0, $size = '', $crop = null, $attr = array(), $webp = false ) {
 		if ( $attachment_id < 1 || empty( $size ) ) {
 			return '';
 		}
@@ -398,7 +404,7 @@ class Core {
 		}
 
 		$html  = '';
-		$image = $this->get_attachment_image_src( $attachment_id, $size, $crop );
+		$image = $this->get_attachment_image_src( $attachment_id, $size, $crop, $webp );
 		if ( $image ) {
 			$hwstring   = image_hwstring( $image['width'], $image['height'] );
 			$size_class = $size;
