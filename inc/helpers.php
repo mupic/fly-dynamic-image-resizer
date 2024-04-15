@@ -23,11 +23,12 @@ if ( ! function_exists( 'fly_get_attachment_image_src' ) ) {
 	 * @param  integer  $attachment_id
 	 * @param  mixed    $size
 	 * @param  boolean  $crop
+	 * @param  boolean  $webp
 	 * @return array
 	 */
-	function fly_get_attachment_image_src( $attachment_id = 0, $size = '', $crop = null ) {
+	function fly_get_attachment_image_src( $attachment_id = 0, $size = '', $crop = null, $webp = false ) {
 		$fly_images = JB\FlyImages\Core::get_instance();
-		return $fly_images->get_attachment_image_src( $attachment_id, $size, $crop );
+		return $fly_images->get_attachment_image_src( $attachment_id, $size, $crop, $webp );
 	}
 }
 
@@ -39,11 +40,12 @@ if ( ! function_exists( 'fly_get_attachment_image' ) ) {
 	 * @param  mixed    $size
 	 * @param  boolean  $crop
 	 * @param  array    $attr
+	 * @param  boolean  $webp
 	 * @return string
 	 */
-	function fly_get_attachment_image( $attachment_id = 0, $size = '', $crop = null, $attr = array() ) {
+	function fly_get_attachment_image( $attachment_id = 0, $size = '', $crop = null, $attr = array(), $webp = false ) {
 		$fly_images = JB\FlyImages\Core::get_instance();
-		return $fly_images->get_attachment_image( $attachment_id, $size, $crop, $attr );
+		return $fly_images->get_attachment_image( $attachment_id, $size, $crop, $attr, $webp );
 	}
 }
 
