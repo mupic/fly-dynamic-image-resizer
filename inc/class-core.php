@@ -357,7 +357,7 @@ class Core {
 						$src_h = $custom_crop_h;
 					}
 
-					$image_editor->crop( $src_x, $src_y, $src_w, $src_h, null, null, false );
+					$image_editor->crop( round($src_x), round($src_y), round($src_w), round($src_h), null, null, false );
 					$crop = false;
 				}
 				$image_editor->resize( $width, $height, $crop );
